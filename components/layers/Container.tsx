@@ -1,7 +1,7 @@
 import React from 'react'
 import { HomeNav } from '../home/HomeNav'
 
-function LayoutContainer({
+export default function LayoutContainer({
   children,
   navComponent: NavComponent = HomeNav,
 }: React.PropsWithChildren<{ navComponent?: React.ComponentType }>) {
@@ -27,5 +27,3 @@ function LayoutContainer({
     </div>
   )
 }
-
-export default LayoutContainer

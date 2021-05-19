@@ -1,5 +1,5 @@
 import React from 'react'
-import UserHome from '../componnents/scenes/UserHome'
+import UserHome from '../components/scenes/UserHome'
 
 const IndexPage = () => {
   return <UserHome />
