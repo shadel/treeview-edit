@@ -1,6 +1,7 @@
 export enum SmartDataType {
   ACTIVITY,
   TASK,
+  TASK_OPTION,
 }
 
 export interface ISmartData {
