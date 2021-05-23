@@ -65,6 +65,10 @@ const useTreeItemStyles = makeStyles((theme) => ({
   },
 }))
 
+function onLabelClick(event: React.MouseEvent) {
+  event.preventDefault()
+}
+
 const DnDTreeItem = ({
   task,
   index,
@@ -136,6 +140,7 @@ const DnDTreeItem = ({
             group: newClasses.group,
             label: newClasses.label,
           }}
+          onLabelClick={onLabelClick}
         />
       )}
       {tasks && (
@@ -151,6 +156,7 @@ const DnDTreeItem = ({
             group: newClasses.group,
             label: newClasses.label,
           }}
+          onLabelClick={onLabelClick}
         >
           {/* {!tasks && LazyLoadComponent && <LazyLoadComponent id={task.id} />} */}
           {tasks && (
