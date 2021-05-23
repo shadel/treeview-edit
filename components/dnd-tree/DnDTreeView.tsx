@@ -24,6 +24,7 @@ interface IDnDListProps {
   }) => React.ReactNode
   isDragDisabled?: boolean
   lazyLoad?: React.ComponentType<{ id: string }>
+  onSelect?: (event: React.ChangeEvent, nodeIds: string[]) => void
 }
 
 const makeDragEnd = (updateTasks: OnChangeFunc<ISmartData[]>) => () => (result: DropResult) => {
@@ -42,6 +43,7 @@ const DnDTreeView = ({
   updateTasks,
   isDragDisabled: isDragDisabled,
   lazyLoad,
+  onSelect,
 }: IDnDListProps) => {
   const onDragEnd = makeDragEnd(updateTasks)()
 
@@ -63,6 +65,7 @@ const DnDTreeView = ({
       className={classes ? classes.root : ''}
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
+      onNodeSelect={onSelect}
     >
       <DragDropContext onDragEnd={onDragEnd}>
         <DroppableArea droppableId="root" type="activty">

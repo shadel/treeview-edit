@@ -28,6 +28,7 @@ interface IProps {
   onChange: OnChangeFunc<ISmartData[]>
   isSaving?: boolean
   createLazyloadingFunc?: () => React.ComponentType<{ id: string }>
+  onSelect?: (event: React.ChangeEvent, nodeIds: string[]) => void
 }
 
 const createItem = (isEditMode: boolean) => {
@@ -48,6 +49,7 @@ const TreeView = ({
   onChange,
   isSaving,
   createLazyloadingFunc = createLazyloading,
+  onSelect,
 }: IProps) => {
   const classes = useStyles()
 
@@ -65,6 +67,7 @@ const TreeView = ({
         updateTasks={onChange}
         isDragDisabled={!canEdit || isSaving}
         lazyLoad={lazyTasksComponent}
+        onSelect={onSelect}
       />
     </React.Fragment>
   )
