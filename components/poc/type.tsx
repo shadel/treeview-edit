@@ -50,21 +50,6 @@ export interface ITask {
   name: string
   properties: unknown
 }
-export enum TaskSurveyOptionsType {
-  Normal,
-  ActivityTemplate,
-}
-export interface ITaskSurveyOptions {
-  id: string
-  type: TaskSurveyOptionsType
-  value: unknown
-}
-
-export interface ITaskSurvey extends ITask {
-  properties: {
-    options: ITaskSurveyOptions[]
-  }
-}
 export interface IActivity {
   id: string
   name: string

@@ -1,4 +1,5 @@
-import { IActivity, IActivityRecord, TaskSurveyOptionsType, TaskType } from '../poc/type'
+import { TaskSurveyOptionsType } from '../poc/taskPackage/survey/type'
+import { IActivity, IActivityRecord, TaskType } from '../poc/type'
 
 export const activity: IActivity = {
   id: `a1`,

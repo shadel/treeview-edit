@@ -8,13 +8,14 @@ import { ISmartData } from '../dnd-tree/type'
 import LayoutContainer from '../layers/Container'
 import { extractTree } from '../poc/helper'
 import TreeView from '../poc/TreeView'
-import { IActivity, ITask, tasksPackages, TaskType } from '../poc/type'
+import { IActivity, ITask, TaskType } from '../poc/type'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
 import Chip from '@material-ui/core/Chip'
 import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
 import { IStore, useDispatch, useSelector } from './context'
 import { resetServerContext } from 'react-beautiful-dnd'
+import taskPackageF from '../poc/taskPackage'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()
@@ -111,12 +112,10 @@ function UserHome() {
   )
   const onNew = useCallback(
     (type: string, index: number) => {
-      const newTask: ITask = {
-        id: `${new Date().getTime()}`,
-        name: type,
-        type: type as TaskType,
-        properties: {},
-      }
+      const tPack = taskPackageF.get(type as TaskType)
+
+      const newTask: ITask = tPack.createNew()
+
       dispatch({
         type: `add_task`,
         payload: {
@@ -140,7 +139,7 @@ function UserHome() {
             <Card>
               <CardContent className={classes.root}>
                 <DroppableArea droppableId={`${DropZone.TASK_PACKAGE}`} type="activty.item">
-                  {tasksPackages.map(({ name, type }, idx) => (
+                  {taskPackageF.list().map(({ name, type }, idx) => (
                     <DraggableItem
                       draggableId={`${type}`}
                       type={`activty.item`}
