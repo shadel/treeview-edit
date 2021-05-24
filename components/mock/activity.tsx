@@ -7,7 +7,7 @@ export const activity: IActivity = {
     {
       id: `t1`,
       name: `T 1`,
-      type: TaskType.instructionCard,
+      type: TaskType.InstructionCard,
       properties: {},
     },
     {
@@ -26,7 +26,7 @@ export const activity: IActivity = {
                 {
                   id: `a2t1`,
                   name: `T 1`,
-                  type: TaskType.instructionCard,
+                  type: TaskType.InstructionCard,
                 },
               ],
             },

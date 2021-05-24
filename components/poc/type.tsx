@@ -1,5 +1,5 @@
 export enum TaskType {
-  instructionCard = 'instructionCard',
+  InstructionCard = 'InstructionCard',
   Survey = 'Survey',
   Photo = 'Photo',
   Video = 'Video',
@@ -7,6 +7,42 @@ export enum TaskType {
   LogonTask = 'LogonTask',
   DocumentAcknowledge = 'DocumentAcknowledge',
 }
+
+export interface ITaskPackage {
+  name: string
+  type: TaskType
+}
+
+export const tasksPackages = [
+  {
+    name: 'Instruction Card',
+    type: TaskType.InstructionCard,
+  },
+  {
+    name: 'Survey',
+    type: TaskType.Survey,
+  },
+  {
+    name: 'Photo',
+    type: TaskType.Photo,
+  },
+  {
+    name: 'Video',
+    type: TaskType.Video,
+  },
+  {
+    name: 'Upload File',
+    type: TaskType.UploadFile,
+  },
+  {
+    name: 'Logon Task',
+    type: TaskType.LogonTask,
+  },
+  {
+    name: 'Document Acknowledge',
+    type: TaskType.DocumentAcknowledge,
+  },
+]
 
 export interface ITask {
   type: TaskType
