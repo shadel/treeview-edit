@@ -70,3 +70,9 @@ export interface IActivity {
   name: string
   items: ITask[]
 }
+
+export interface IActivityRecord {
+  id: string
+  name: string
+  items: string[]
+}

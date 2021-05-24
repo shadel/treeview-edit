@@ -2,18 +2,18 @@ import { Card } from '@material-ui/core'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import React from 'react'
+import React, { useMemo } from 'react'
 import DraggableItem from '../dnd-tree/DraggableItem'
 import { ISmartData } from '../dnd-tree/type'
 import LayoutContainer from '../layers/Container'
-import { activity } from '../mock/activity'
 import { extractTree } from '../poc/helper'
 import TreeView from '../poc/TreeView'
-import { tasksPackages } from '../poc/type'
+import { IActivity, tasksPackages } from '../poc/type'
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
 import Chip from '@material-ui/core/Chip'
 import { DropZone, makeDragEnd } from '../dnd-tree/makeDragEnd'
+import { IStore, useSelector } from './context'
 resetServerContext()
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,9 +40,37 @@ function smartSearch(
   return null
 }
 
+function useActivity(id: string): IActivity | null {
+  const activitySelector = useMemo(
+    () => (store: IStore) => store.activities.find((item) => item.id === id),
+    [id]
+  )
+  const activity = useSelector(activitySelector)
+  const taskIds = useMemo(() => (activity ? activity.items : []), [activity])
+
+  const taskSelector = useMemo(
+    () => (store: IStore) => store.tasks.filter((item) => taskIds.includes(item.id)),
+    [taskIds]
+  )
+  const tasks = useSelector(taskSelector)
+
+  const res = useMemo(
+    () =>
+      activity
+        ? {
+            ...activity,
+            items: tasks,
+          }
+        : null,
+    [activity, tasks]
+  )
+  return res
+}
+
 function UserHome() {
   const classes = useStyles()
-  const data = React.useMemo(() => [extractTree(activity)], [])
+  const activity = useActivity('a1')
+  const data = React.useMemo(() => [extractTree(activity)], [activity])
   const [smartData, setSmartData] = React.useState<ISmartData[]>(data)
   const [nodeSelected, setNodeSelected] = React.useState('')
   const onSelect = React.useCallback((event: React.ChangeEvent, nodeIds: string[]) => {
