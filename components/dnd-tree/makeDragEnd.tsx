@@ -6,6 +6,11 @@ export enum DropZone {
   TASK_PACKAGE = 'TASK_PACKAGE',
 }
 
+function isAddNew(result: DropResult) {
+  const { source } = result
+  return source.droppableId === DropZone.TASK_PACKAGE
+}
+
 export const makeDragEnd = (updateTasks: OnChangeFunc<ISmartData[]>) => () => (
   result: DropResult
 ) => {
@@ -35,4 +40,22 @@ export const makeDragEnd = (updateTasks: OnChangeFunc<ISmartData[]>) => () => (
   }
 
   updateTasks((items) => reorder(items, result))
+}
+export const makeNewDragEnd = ({
+  onMove,
+  onNew,
+}: {
+  onMove: (data: string, from: number, to: number) => void
+  onNew: (data: string, index: number) => void
+}) => (result: DropResult) => {
+  if (!result.destination) {
+    return
+  }
+
+  const { source, destination, draggableId } = result
+  if (isAddNew(result)) {
+    onNew(draggableId, destination.index)
+    return
+  }
+  onMove(draggableId, source.index, destination.index)
 }

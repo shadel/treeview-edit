@@ -2,19 +2,23 @@ import { Card } from '@material-ui/core'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import DraggableItem from '../dnd-tree/DraggableItem'
 import { ISmartData } from '../dnd-tree/type'
 import LayoutContainer from '../layers/Container'
 import { extractTree } from '../poc/helper'
 import TreeView from '../poc/TreeView'
-import { IActivity, tasksPackages } from '../poc/type'
-import { DragDropContext, resetServerContext } from 'react-beautiful-dnd'
+import { IActivity, ITask, tasksPackages, TaskType } from '../poc/type'
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
 import Chip from '@material-ui/core/Chip'
-import { DropZone, makeDragEnd } from '../dnd-tree/makeDragEnd'
-import { IStore, useSelector } from './context'
+import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
+import { IStore, useDispatch, useSelector } from './context'
+import { resetServerContext } from 'react-beautiful-dnd'
+
+// eslint-disable-next-line no-debugger
 resetServerContext()
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -41,15 +45,18 @@ function smartSearch(
 }
 
 function useActivity(id: string): IActivity | null {
-  const activitySelector = useMemo(
-    () => (store: IStore) => store.activities.find((item) => item.id === id),
+  const activitySelector = useCallback(
+    (store: IStore) => store.activities.find((item) => item.id === id),
     [id]
   )
   const activity = useSelector(activitySelector)
   const taskIds = useMemo(() => (activity ? activity.items : []), [activity])
 
-  const taskSelector = useMemo(
-    () => (store: IStore) => store.tasks.filter((item) => taskIds.includes(item.id)),
+  const taskSelector = useCallback(
+    (store: IStore) =>
+      store.tasks
+        .filter((item) => taskIds.includes(item.id))
+        .sort((a, b) => taskIds.indexOf(a.id) - taskIds.indexOf(b.id)),
     [taskIds]
   )
   const tasks = useSelector(taskSelector)
@@ -68,10 +75,13 @@ function useActivity(id: string): IActivity | null {
 }
 
 function UserHome() {
+  resetServerContext()
+
   const classes = useStyles()
-  const activity = useActivity('a1')
-  const data = React.useMemo(() => [extractTree(activity)], [activity])
-  const [smartData, setSmartData] = React.useState<ISmartData[]>(data)
+  const activityId = 'a1'
+  const activity = useActivity(activityId)
+  const smartData = React.useMemo(() => [extractTree(activity)], [activity])
+
   const [nodeSelected, setNodeSelected] = React.useState('')
   const onSelect = React.useCallback((event: React.ChangeEvent, nodeIds: string[]) => {
     console.log(event, nodeIds)
@@ -81,7 +91,47 @@ function UserHome() {
     return smartSearch(smartData, (data) => data.id === nodeSelected)
   }, [nodeSelected, smartData])
 
-  const onDragEnd = makeDragEnd(setSmartData)()
+  const dispatch = useDispatch()
+
+  const onMove = useCallback(
+    (data: string, from: number, to: number) => {
+      const ids = data.split('.')
+      const taskId = ids[ids.length - 1]
+      dispatch({
+        type: `move_task`,
+        payload: {
+          activityId,
+          taskId: taskId,
+          from,
+          to,
+        },
+      })
+    },
+    [activityId, dispatch]
+  )
+  const onNew = useCallback(
+    (type: string, index: number) => {
+      const newTask: ITask = {
+        id: `${new Date().getTime()}`,
+        name: type,
+        type: type as TaskType,
+        properties: {},
+      }
+      dispatch({
+        type: `add_task`,
+        payload: {
+          data: newTask,
+          index,
+          target: activityId,
+        },
+      })
+    },
+    [activityId, dispatch]
+  )
+  const onDragEnd = useCallback((result: DropResult) => makeNewDragEnd({ onMove, onNew })(result), [
+    onMove,
+    onNew,
+  ])
   return (
     <LayoutContainer>
       <Grid container={true} spacing={8}>
@@ -103,12 +153,7 @@ function UserHome() {
                 </DroppableArea>
               </CardContent>
             </Card>
-            <TreeView
-              datum={smartData}
-              canEdit={true}
-              onChange={setSmartData}
-              onSelect={onSelect}
-            />
+            <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
           </DragDropContext>
         </Grid>
         <Grid item={true} md={8} xs={8}>

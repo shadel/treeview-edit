@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
 interface IProps {
   datum: ISmartData[]
   canEdit: boolean
-  onChange: OnChangeFunc<ISmartData[]>
+  onChange?: OnChangeFunc<ISmartData[]>
   isSaving?: boolean
   createLazyloadingFunc?: () => React.ComponentType<{ id: string }>
   onSelect?: (event: React.ChangeEvent, nodeIds: string[]) => void
