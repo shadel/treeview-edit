@@ -16,6 +16,7 @@ import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
 import { IStore, useDispatch, useSelector } from './context'
 import { resetServerContext } from 'react-beautiful-dnd'
 import taskPackageF from '../poc/taskPackage'
+import DetailPage from './DetailPage'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()
@@ -156,7 +157,7 @@ function UserHome() {
           </DragDropContext>
         </Grid>
         <Grid item={true} md={8} xs={8}>
-          {selectedData && selectedData.name}
+          {selectedData && <DetailPage data={selectedData} />}
         </Grid>
       </Grid>
     </LayoutContainer>
