@@ -9,6 +9,10 @@ export interface AddTaskAction {
   type: `add_task`
   payload: { data: ITask; index: number; target: string }
 }
+export interface UpdateTaskAction {
+  type: `update_task`
+  payload: { data: ITask }
+}
 export function activityReducer(state = activityRecords, action: MoveTaskAction | AddTaskAction) {
   switch (action.type) {
     case `add_task`: {
@@ -33,10 +37,19 @@ export function activityReducer(state = activityRecords, action: MoveTaskAction 
   return state
 }
 
-export function taskReducer(state = taskRecords, action: AddTaskAction) {
+export function taskReducer(state = taskRecords, action: AddTaskAction | UpdateTaskAction) {
   switch (action.type) {
     case `add_task`: {
       return [action.payload.data, ...state]
+    }
+    case `update_task`: {
+      const { data } = action.payload
+      return state.map((item) => {
+        if (item.id !== data.id) {
+          return item
+        }
+        return { ...item, ...data }
+      })
     }
   }
   return state

@@ -1,6 +1,7 @@
 import { ISmartData, SmartDataType } from '../../../dnd-tree/type'
-import { extractTree } from '../../helper'
-import { IActivity, TaskType } from '../../type'
+import { IStore } from '../../../scenes/context'
+import { valueParse } from '../../helper'
+import { TaskType } from '../../type'
 import { IPackage } from '../type'
 import View from './component/view'
 import { ITaskSurvey, ITaskSurveyOptions, TaskSurveyOptionsType } from './type'
@@ -21,26 +22,40 @@ function createNew() {
   return item
 }
 
-function extractTreeTaskSurvey(item: ITaskSurvey): ISmartData {
+function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey): ISmartData[] {
   function filterOption(options: ITaskSurveyOptions[]) {
     return options.filter(({ type }) => type === TaskSurveyOptionsType.ActivityTemplate)
   }
-  function option2Tree(item: ITaskSurveyOptions) {
-    return extractTree(item.value as IActivity)
-  }
-  return {
-    id: item.id,
-    name: item.name,
-    type: SmartDataType.TASK,
-    items: filterOption(item.properties.options).map(option2Tree),
-  }
+  const options = filterOption(item.properties.options).map((item) => ({
+    ...item,
+    value: valueParse(item.value),
+  }))
+
+  const templateIds = options.map((item) => item.value.template)
+
+  const templates = store.activities.filter((item) => templateIds.includes(item.id))
+
+  return options
+    .map((item) => {
+      const template = templates.find((tItem) => tItem.id === item.value.template)
+      if (!template) {
+        return undefined
+      }
+      return {
+        id: item.value.template,
+        name: `${item.value.name} ~ ${template.name}`,
+        type: SmartDataType.ACTIVITY,
+        items: [],
+      }
+    })
+    .filter((item: ISmartData | undefined): item is ISmartData => !!item)
 }
 
 const tPack: IPackage = {
   name: PACKAGE_NAME,
   type: PACKAGE_TYPE,
   createNew,
-  extractTree: extractTreeTaskSurvey,
+  queryChilds: extractTreeTaskSurvey,
   view: View,
 }
 export default tPack

@@ -124,7 +124,6 @@ const DnDTreeItem = ({
     <DraggableItem
       draggableId={`${dropeId}.${task.id}`}
       index={index}
-      type={type}
       isDragDisabled={isDragDisabled}
     >
       {!tasks && (

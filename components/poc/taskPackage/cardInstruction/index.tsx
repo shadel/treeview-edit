@@ -1,4 +1,4 @@
-import { ISmartData, SmartDataType } from '../../../dnd-tree/type'
+import { ISmartData } from '../../../dnd-tree/type'
 import { ITask, TaskType } from '../../type'
 import { IPackage } from '../type'
 import View from './component/view'
@@ -17,20 +17,15 @@ function createNew() {
   return item
 }
 
-function extractTree(item: ITask): ISmartData {
-  return {
-    id: item.id,
-    name: item.name,
-    type: SmartDataType.TASK,
-    items: [],
-  }
+function extractTree(): ISmartData[] {
+  return []
 }
 
 const tPack: IPackage = {
   name: PACKAGE_NAME,
   type: PACKAGE_TYPE,
   createNew,
-  extractTree: extractTree,
+  queryChilds: extractTree,
   view: View,
 }
 export default tPack

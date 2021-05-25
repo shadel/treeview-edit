@@ -4,9 +4,8 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useCallback, useMemo } from 'react'
 import DraggableItem from '../dnd-tree/DraggableItem'
-import { ISmartData } from '../dnd-tree/type'
+import { ISmartData, SmartDataType } from '../dnd-tree/type'
 import LayoutContainer from '../layers/Container'
-import { extractTree } from '../poc/helper'
 import TreeView from '../poc/TreeView'
 import { IActivity, ITask, TaskType } from '../poc/type'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
@@ -17,6 +16,8 @@ import { IStore, useDispatch, useSelector } from './context'
 import { resetServerContext } from 'react-beautiful-dnd'
 import taskPackageF from '../poc/taskPackage'
 import DetailPage from './DetailPage'
+import { ActivityProvider } from './ActivityContext'
+import { useTreeNode } from '../poc/helper'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()
@@ -82,7 +83,9 @@ function UserHome() {
   const classes = useStyles()
   const activityId = 'a1'
   const activity = useActivity(activityId)
-  const smartData = React.useMemo(() => [extractTree(activity)], [activity])
+  const rootNode = { id: activity.id, name: activity.name, type: SmartDataType.ACTIVITY, items: [] }
+  const treeNodeData = useTreeNode(rootNode)
+  const smartData = useMemo(() => [treeNodeData], [treeNodeData])
 
   const [nodeSelected, setNodeSelected] = React.useState('')
   const onSelect = React.useCallback((event: React.ChangeEvent, nodeIds: string[]) => {
@@ -134,32 +137,29 @@ function UserHome() {
   ])
   return (
     <LayoutContainer>
-      <Grid container={true} spacing={8}>
-        <Grid item={true} md={4} xs={4}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Card>
-              <CardContent className={classes.root}>
-                <DroppableArea droppableId={`${DropZone.TASK_PACKAGE}`} type="activty.item">
-                  {taskPackageF.list().map(({ name, type }, idx) => (
-                    <DraggableItem
-                      draggableId={`${type}`}
-                      type={`activty.item`}
-                      index={idx}
-                      key={type}
-                    >
-                      <Chip label={name} variant="outlined" />
-                    </DraggableItem>
-                  ))}
-                </DroppableArea>
-              </CardContent>
-            </Card>
-            <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
-          </DragDropContext>
+      <ActivityProvider activityId={activityId}>
+        <Grid container={true} spacing={8}>
+          <Grid item={true} md={4} xs={4}>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Card>
+                <CardContent className={classes.root}>
+                  <DroppableArea droppableId={`${DropZone.TASK_PACKAGE}`} type="activty.item">
+                    {taskPackageF.list().map(({ name, type }, idx) => (
+                      <DraggableItem draggableId={`${type}`} index={idx} key={type}>
+                        <Chip label={name} variant="outlined" />
+                      </DraggableItem>
+                    ))}
+                  </DroppableArea>
+                </CardContent>
+              </Card>
+              <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
+            </DragDropContext>
+          </Grid>
+          <Grid item={true} md={8} xs={8}>
+            {selectedData && <DetailPage data={selectedData} />}
+          </Grid>
         </Grid>
-        <Grid item={true} md={8} xs={8}>
-          {selectedData && <DetailPage data={selectedData} />}
-        </Grid>
-      </Grid>
+      </ActivityProvider>
     </LayoutContainer>
   )
 }
