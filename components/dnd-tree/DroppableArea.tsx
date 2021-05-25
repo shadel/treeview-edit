@@ -23,7 +23,13 @@ const useStyles = makeStyles(() =>
 
 export type DroppableItemProps = Omit<DroppableProps, 'children'>
 
-const DroppableArea = ({ children, ...props }: PropsWithChildren<DroppableItemProps>) => {
+const DroppableArea = ({
+  children,
+  className,
+  ...props
+}: PropsWithChildren<DroppableItemProps> & {
+  className: string
+}) => {
   const classes = useStyles()
   return (
     <Droppable {...props}>
@@ -32,6 +38,7 @@ const DroppableArea = ({ children, ...props }: PropsWithChildren<DroppableItemPr
           ref={provided.innerRef}
           className={clsx({
             [classes.draggingOver]: snapshot.isDraggingOver,
+            [className]: true,
           })}
           {...provided.droppableProps}
         >

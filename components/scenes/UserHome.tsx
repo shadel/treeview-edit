@@ -3,14 +3,12 @@ import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import React, { useCallback, useMemo } from 'react'
-import DraggableItem from '../dnd-tree/DraggableItem'
 import { ISmartData, SmartDataType } from '../dnd-tree/type'
 import LayoutContainer from '../layers/Container'
 import TreeView from '../poc/TreeView'
 import { IActivity, ITask, TaskType } from '../poc/type'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
-import Chip from '@material-ui/core/Chip'
 import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
 import { IStore, useDispatch, useSelector } from './context'
 import { resetServerContext } from 'react-beautiful-dnd'
@@ -18,14 +16,18 @@ import taskPackageF from '../poc/taskPackage'
 import DetailPage from './DetailPage'
 import { ActivityProvider } from './ActivityContext'
 import { useTreeNode } from '../poc/helper'
+import DraggableChip from './DraggableChip'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(1),
+      margin: theme.spacing(0.5),
     },
   },
 }))
@@ -148,12 +150,22 @@ function UserHome() {
           <Grid item={true} md={4} xs={4}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Card variant="outlined">
-                <CardContent className={classes.root}>
-                  <DroppableArea droppableId={`${DropZone.TASK_PACKAGE}`} type="activty.item">
+                <CardContent>
+                  <DroppableArea
+                    droppableId={`${DropZone.TASK_PACKAGE}`}
+                    type="activty.item"
+                    className={classes.root}
+                  >
                     {taskPackageF.list().map(({ name, type }, idx) => (
-                      <DraggableItem draggableId={`${type}`} index={idx} key={type}>
-                        <Chip label={name} variant="outlined" />
-                      </DraggableItem>
+                      <DraggableChip
+                        chipProps={{
+                          label: name,
+                          variant: 'outlined',
+                        }}
+                        key={type}
+                        draggableId={`${type}`}
+                        index={idx}
+                      />
                     ))}
                   </DroppableArea>
                 </CardContent>
