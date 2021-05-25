@@ -1,5 +1,5 @@
 import { activityRecords, taskRecords } from '../mock/activity'
-import { ITask } from '../poc/type'
+import { IActivityRecord, ITask } from '../poc/type'
 
 export interface MoveTaskAction {
   type: `move_task`
@@ -13,7 +13,14 @@ export interface UpdateTaskAction {
   type: `update_task`
   payload: { data: ITask }
 }
-export function activityReducer(state = activityRecords, action: MoveTaskAction | AddTaskAction) {
+export interface UpdateActivityAction {
+  type: `update_activity`
+  payload: { data: IActivityRecord }
+}
+export function activityReducer(
+  state = activityRecords,
+  action: MoveTaskAction | AddTaskAction | UpdateActivityAction
+) {
   switch (action.type) {
     case `add_task`: {
       return state.map((item) => {
@@ -31,6 +38,14 @@ export function activityReducer(state = activityRecords, action: MoveTaskAction 
           item.items.splice(action.payload.to, 0, element)
         }
         return { ...item, items: item.items }
+      })
+    }
+    case `update_activity`: {
+      return state.map((item) => {
+        if (item.id === action.payload.data.id) {
+          return { ...item, ...action.payload.data }
+        }
+        return item
       })
     }
   }

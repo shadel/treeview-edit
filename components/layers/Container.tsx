@@ -19,7 +19,7 @@ export default function LayoutContainer({
             <polygon points="50,0 100,0 50,100 0,100" />
           </svg>
           <NavComponent />
-          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6">
             <div className="sm:text-center lg:text-left">{children}</div>
           </main>
         </div>

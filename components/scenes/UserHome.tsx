@@ -147,7 +147,7 @@ function UserHome() {
         <Grid container={true} spacing={8}>
           <Grid item={true} md={4} xs={4}>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Card>
+              <Card variant="outlined">
                 <CardContent className={classes.root}>
                   <DroppableArea droppableId={`${DropZone.TASK_PACKAGE}`} type="activty.item">
                     {taskPackageF.list().map(({ name, type }, idx) => (
@@ -158,7 +158,11 @@ function UserHome() {
                   </DroppableArea>
                 </CardContent>
               </Card>
-              <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
+              <Card variant="outlined">
+                <CardContent className={classes.root}>
+                  <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
+                </CardContent>
+              </Card>
             </DragDropContext>
           </Grid>
           <Grid item={true} md={8} xs={8}>

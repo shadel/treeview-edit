@@ -5,7 +5,10 @@ import { OnChangeFunc } from '../../../../dnd-tree/type'
 import { valueParse } from '../../../helper'
 import { useActivityTemplaties } from '../hepler'
 import { ITaskSurveyOptions } from '../type'
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: theme.spacing(2),
+  },
   formControl: {
     minWidth: 120,
   },
@@ -73,7 +76,7 @@ export function SDAOption({
   )
 
   return (
-    <Grid container={true} key={option.id}>
+    <Grid container={true} key={option.id} className={classes.root}>
       <Grid item={true} sm={6}>
         <TextField
           id="outlined-basic"

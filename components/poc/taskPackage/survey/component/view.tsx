@@ -62,7 +62,7 @@ function View({ task }: { task: ITaskSurvey }) {
       id: `${new Date().getTime()}`,
       type: TaskSurveyOptionsType.ActivityTemplate,
       value: JSON.stringify({
-        name: `Option ${task.properties.options.length}`,
+        name: `Option ${task.properties.options.length + 1}`,
         template: activityTemplates[0].id,
       }),
     }

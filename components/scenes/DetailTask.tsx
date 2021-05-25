@@ -3,6 +3,7 @@ import { ISmartData } from '../dnd-tree/type'
 import { ITask } from '../poc/type'
 import { useSelector } from './context'
 import taskPackageF from '../poc/taskPackage'
+import { RightPage } from '../layers/RightPage'
 
 function TaskView({ task }: { task: ITask }) {
   const tPack = taskPackageF.get(task.type)
@@ -11,7 +12,11 @@ function TaskView({ task }: { task: ITask }) {
   }
   const View = tPack.view
 
-  return <View task={task} />
+  return (
+    <RightPage title={tPack.name}>
+      <View task={task} />
+    </RightPage>
+  )
 }
 
 function DetailTask({ data }: { data: ISmartData }) {
