@@ -5,7 +5,7 @@ import { useSelector } from './context'
 import taskPackageF from '../poc/taskPackage'
 import { RightPage } from '../layers/RightPage'
 
-function TaskView({ task }: { task: ITask }) {
+function TaskView({ task, disabled }: { task: ITask; disabled?: boolean }) {
   const tPack = taskPackageF.get(task.type)
   if (!tPack) {
     return <>Task package {task.type} not available</>
@@ -14,7 +14,7 @@ function TaskView({ task }: { task: ITask }) {
 
   return (
     <RightPage title={tPack.name}>
-      <View task={task} />
+      <View task={task} disabled={disabled} />
     </RightPage>
   )
 }
@@ -24,6 +24,6 @@ function DetailTask({ data }: { data: ISmartData }) {
   if (!task) {
     return <>Task {data.name} not available</>
   }
-  return <TaskView task={task} />
+  return <TaskView task={task} disabled={data.disabled} />
 }
 export default React.memo(DetailTask)

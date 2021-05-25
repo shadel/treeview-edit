@@ -1,20 +1,22 @@
 import * as React from 'react'
 import { TreeView } from '@material-ui/lab'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import DnDTreeItem from './DnDTreeItem'
 import DroppableArea from './DroppableArea'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { ISmartData, OnChangeFunc } from './type'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { CloseSquare, MinusSquare, PlusSquare } from './StyleTreeITem'
+
+const useStyles = makeStyles({
+  root: {
+    height: '100%',
+    flexGrow: 1,
+    maxWidth: 400,
+  },
+})
 
 interface IDnDListProps {
   items: ISmartData[]
   updateTasks: OnChangeFunc<ISmartData[]>
-  classes?: {
-    root?: string
-    item?: {
-      root?: string
-    }
-  }
   item: (props: {
     task: ISmartData
     idx: number
@@ -26,7 +28,6 @@ interface IDnDListProps {
 }
 
 const DnDTreeView = ({
-  classes,
   item,
   items: tasks,
   updateTasks,
@@ -34,6 +35,8 @@ const DnDTreeView = ({
   lazyLoad,
   onSelect,
 }: IDnDListProps) => {
+  const classes = useStyles()
+
   const createItemChange = (id: string): OnChangeFunc<ISmartData | undefined> => (func) => {
     return updateTasks((oldData) =>
       oldData
@@ -49,9 +52,11 @@ const DnDTreeView = ({
 
   return (
     <TreeView
-      className={classes ? classes.root : ''}
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
+      className={classes.root}
+      defaultExpanded={['1']}
+      defaultCollapseIcon={<MinusSquare />}
+      defaultExpandIcon={<PlusSquare />}
+      defaultEndIcon={<CloseSquare />}
       onNodeSelect={onSelect}
     >
       <DroppableArea droppableId="root" type="activty">
@@ -62,7 +67,6 @@ const DnDTreeView = ({
             index={index}
             dropeId="root"
             item={item}
-            classes={classes ? classes.item : undefined}
             isDragDisabled={isDragDisabled}
             lazyLoad={lazyLoad}
             onChange={createItemChange(task.id)}

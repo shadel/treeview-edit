@@ -17,9 +17,11 @@ const useStyles = makeStyles((theme) => ({
 export function SDAOption({
   option,
   onChange,
+  disabled,
 }: {
   option: ITaskSurveyOptions
   onChange: OnChangeFunc<ITaskSurveyOptions[]>
+  disabled?: boolean
 }) {
   const classes = useStyles()
   const activityTemplates = useActivityTemplaties()
@@ -85,6 +87,7 @@ export function SDAOption({
           value={name}
           fullWidth={true}
           onChange={onNameChange}
+          disabled={disabled}
         />
       </Grid>
       <Grid item={true} sm={6}>
@@ -96,6 +99,7 @@ export function SDAOption({
             value={template}
             onChange={onOptionChange}
             label="Value"
+            disabled={disabled}
           >
             {activityTemplates.map((item) => (
               <MenuItem value={item.id} key={item.id}>

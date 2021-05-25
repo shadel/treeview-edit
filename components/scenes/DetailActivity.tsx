@@ -30,6 +30,7 @@ function DetailActivity({ data }: { data: ISmartData }) {
         value={activity.name}
         fullWidth={true}
         onChange={onNameChange}
+        disabled={data.disabled}
       />
     </RightPage>
   )

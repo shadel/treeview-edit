@@ -6,7 +6,7 @@ import { ITask, TaskType } from '../type'
 export interface IPackage {
   type: TaskType
   name: string
-  queryChilds: (store: IStore, task: ITask) => ISmartData[]
+  queryChilds: (store: IStore, task: ITask, node: ISmartData) => ISmartData[]
   createNew: () => ITask
-  view: React.ComponentType<{ task: ITask }>
+  view: React.ComponentType<{ task: ITask; disabled?: boolean }>
 }

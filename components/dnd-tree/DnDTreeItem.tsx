@@ -3,9 +3,9 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { createStyles, makeStyles } from '@material-ui/core'
 import DraggableItem from './DraggableItem'
 import DroppableArea from './DroppableArea'
-import TreeItem from '@material-ui/lab/TreeItem'
 import classNames from 'classnames'
 import { ISmartData, OnChangeFunc } from './type'
+import StyledTreeItem from './StyleTreeITem'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,55 +15,55 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const useTreeItemStyles = makeStyles((theme) => ({
-  root: {
-    color: theme.palette.text.secondary,
-    '&:hover > $content': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    '&:focus > $content, &$selected > $content': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
-      color: 'var(--tree-view-color)',
-    },
-    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
-      backgroundColor: 'transparent',
-    },
-  },
-  content: {
-    color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '$expanded > &': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-  },
-  group: {
-    marginLeft: theme.spacing(2),
-    '& $content': {
-      paddingLeft: theme.spacing(0),
-    },
-  },
-  expanded: {},
-  selected: {},
-  label: {
-    fontWeight: 'inherit',
-    color: 'inherit',
-  },
-  labelRoot: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
-  },
-  labelIcon: {
-    marginRight: theme.spacing(1),
-  },
-  labelText: {
-    fontWeight: 'inherit',
-    flexGrow: 1,
-  },
-}))
+// const useTreeItemStyles = makeStyles((theme) => ({
+//   root: {
+//     color: theme.palette.text.secondary,
+//     '&:hover > $content': {
+//       backgroundColor: theme.palette.action.hover,
+//     },
+//     '&:focus > $content, &$selected > $content': {
+//       backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+//       color: 'var(--tree-view-color)',
+//     },
+//     '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+//       backgroundColor: 'transparent',
+//     },
+//   },
+//   content: {
+//     color: theme.palette.text.secondary,
+//     borderTopRightRadius: theme.spacing(2),
+//     borderBottomRightRadius: theme.spacing(2),
+//     paddingRight: theme.spacing(1),
+//     fontWeight: theme.typography.fontWeightMedium,
+//     '$expanded > &': {
+//       fontWeight: theme.typography.fontWeightRegular,
+//     },
+//   },
+//   group: {
+//     marginLeft: theme.spacing(2),
+//     '& $content': {
+//       paddingLeft: theme.spacing(0),
+//     },
+//   },
+//   expanded: {},
+//   selected: {},
+//   label: {
+//     fontWeight: 'inherit',
+//     color: 'inherit',
+//   },
+//   labelRoot: {
+//     display: 'flex',
+//     alignItems: 'center',
+//     padding: theme.spacing(0.5, 0),
+//   },
+//   labelIcon: {
+//     marginRight: theme.spacing(1),
+//   },
+//   labelText: {
+//     fontWeight: 'inherit',
+//     flexGrow: 1,
+//   },
+// }))
 
 function onLabelClick(event: React.MouseEvent) {
   event.preventDefault()
@@ -98,7 +98,7 @@ const DnDTreeItem = ({
   type: string
 }) => {
   const localClasses = useStyles({})
-  const newClasses = useTreeItemStyles()
+  // const newClasses = useTreeItemStyles()
 
   const tasks = task.items
 
@@ -124,37 +124,35 @@ const DnDTreeItem = ({
     <DraggableItem
       draggableId={`${dropeId}.${task.id}`}
       index={index}
-      isDragDisabled={isDragDisabled}
+      isDragDisabled={isDragDisabled || task.disabled}
     >
-      {!tasks && (
-        <TreeItem
+      {tasks.length === 0 && (
+        <StyledTreeItem
           nodeId={task.id}
           className={classes ? classNames(classes.root, localClasses.root) : localClasses.root}
           label={item({ task, idx: index, onChange })}
-          classes={{
-            root: newClasses.root,
-            content: newClasses.content,
-            expanded: newClasses.expanded,
-            selected: newClasses.selected,
-            group: newClasses.group,
-            label: newClasses.label,
-          }}
+          // classes={{
+          //   content: newClasses.content,
+          //   expanded: newClasses.expanded,
+          //   selected: newClasses.selected,
+          //   group: newClasses.group,
+          //   label: newClasses.label,
+          // }}
           onLabelClick={onLabelClick}
         />
       )}
-      {tasks && (
-        <TreeItem
+      {tasks.length > 0 && (
+        <StyledTreeItem
           nodeId={task.id}
           className={classes ? classNames(classes.root, localClasses.root) : localClasses.root}
           label={item({ task, idx: index, onChange })}
-          classes={{
-            root: newClasses.root,
-            content: newClasses.content,
-            expanded: newClasses.expanded,
-            selected: newClasses.selected,
-            group: newClasses.group,
-            label: newClasses.label,
-          }}
+          // classes={{
+          //   content: newClasses.content,
+          //   expanded: newClasses.expanded,
+          //   selected: newClasses.selected,
+          //   group: newClasses.group,
+          //   label: newClasses.label,
+          // }}
           onLabelClick={onLabelClick}
         >
           {/* {!tasks && LazyLoadComponent && <LazyLoadComponent id={task.id} />} */}
@@ -176,7 +174,7 @@ const DnDTreeItem = ({
               ))}
             </DroppableArea>
           )}
-        </TreeItem>
+        </StyledTreeItem>
       )}
     </DraggableItem>
   )

@@ -29,6 +29,7 @@ export function queryChildActivity(store: IStore, node: ISmartData): ISmartData[
     name: item.name,
     type: SmartDataType.TASK,
     items: [],
+    disabled: node.disabled,
   }))
 }
 
@@ -39,7 +40,7 @@ export function queryChildTask(store: IStore, node: ISmartData) {
   }
   const tPack = taskPackageF.get(nodeData.type)
   if (tPack) {
-    return tPack.queryChilds(store, nodeData)
+    return tPack.queryChilds(store, nodeData, node)
   }
   return []
 }

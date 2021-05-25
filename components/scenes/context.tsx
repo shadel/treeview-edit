@@ -21,7 +21,7 @@ export function UserProvider({ children, ...props }: PropsWithChildren<IUserCont
   return <UserContext.Provider value={props}>{children}</UserContext.Provider>
 }
 
-function composeDispatch<A extends unknown>(dispatchs: Dispatch<A>[]) {
+function composeDispatch<A extends unknown, U extends Dispatch<A>>(dispatchs: U[]) {
   return (action: A) => dispatchs.forEach((dispatch) => dispatch(action))
 }
 

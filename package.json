@@ -20,7 +20,8 @@
     "rc-upload": "^4.2.0",
     "react": "17.0.1",
     "react-beautiful-dnd": "^13.1.0",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "react-spring": "^9.1.2"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",

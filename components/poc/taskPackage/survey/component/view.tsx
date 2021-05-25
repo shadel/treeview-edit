@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
 }))
-function View({ task }: { task: ITaskSurvey }) {
+function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const activityTemplates = useActivityTemplaties()
@@ -89,17 +89,22 @@ function View({ task }: { task: ITaskSurvey }) {
         value={task.name}
         fullWidth={true}
         onChange={onNameChange}
+        disabled={disabled}
       />
       <Toolbar disableGutters={true}>
         <Typography variant="h6" className={classes.title}>
           Options
         </Typography>
-        <Button color="inherit" onClick={onAddOption} disabled={activityTemplates.length === 0}>
+        <Button
+          color="inherit"
+          onClick={onAddOption}
+          disabled={disabled || activityTemplates.length === 0}
+        >
           Add
         </Button>
       </Toolbar>
       {task.properties.options.map((option) => (
-        <SDAOption option={option} key={option.id} onChange={onChangeOptions} />
+        <SDAOption option={option} key={option.id} onChange={onChangeOptions} disabled={disabled} />
       ))}
     </>
   )

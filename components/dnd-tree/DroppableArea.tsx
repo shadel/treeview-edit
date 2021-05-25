@@ -28,7 +28,7 @@ const DroppableArea = ({
   className,
   ...props
 }: PropsWithChildren<DroppableItemProps> & {
-  className: string
+  className?: string
 }) => {
   const classes = useStyles()
   return (
@@ -38,7 +38,7 @@ const DroppableArea = ({
           ref={provided.innerRef}
           className={clsx({
             [classes.draggingOver]: snapshot.isDraggingOver,
-            [className]: true,
+            [className]: !!className,
           })}
           {...provided.droppableProps}
         >

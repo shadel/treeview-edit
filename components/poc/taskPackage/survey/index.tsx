@@ -22,7 +22,7 @@ function createNew() {
   return item
 }
 
-function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey): ISmartData[] {
+function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey, node: ISmartData): ISmartData[] {
   function filterOption(options: ITaskSurveyOptions[]) {
     return options.filter(({ type }) => type === TaskSurveyOptionsType.ActivityTemplate)
   }
@@ -36,17 +36,18 @@ function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey): ISmartData[] {
   const templates = store.activities.filter((item) => templateIds.includes(item.id))
 
   return options
-    .map((item) => {
+    .map<ISmartData | undefined>((item) => {
       const template = templates.find((tItem) => tItem.id === item.value.template)
       if (!template) {
         return undefined
       }
       return {
-        id: `${item.id}.option_${item.id}.${item.value.template}`,
+        id: `${node.id}.option_${item.id}.${item.value.template}`,
         data: item.value.template,
         name: `${item.value.name} ~ ${template.name}`,
         type: SmartDataType.ACTIVITY,
         items: [],
+        disabled: true,
       }
     })
     .filter((item: ISmartData | undefined): item is ISmartData => !!item)

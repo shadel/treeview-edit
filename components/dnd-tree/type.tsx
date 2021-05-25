@@ -10,6 +10,7 @@ export interface ISmartData {
   data: string
   type: SmartDataType
   items: ISmartData[]
+  disabled?: boolean
 }
 
 export type OnChangeFunc<T> = (func: (data: T) => T) => void

@@ -97,7 +97,6 @@ function UserHome() {
 
   const [nodeSelected, setNodeSelected] = React.useState('')
   const onSelect = React.useCallback((event: React.ChangeEvent, nodeIds: string[]) => {
-    console.log(event, nodeIds)
     setNodeSelected((nodeIds as unknown) as string)
   }, [])
   const selectedData = React.useMemo(() => {
