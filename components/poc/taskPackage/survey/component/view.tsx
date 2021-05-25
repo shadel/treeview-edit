@@ -3,7 +3,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import React, { ChangeEventHandler, useCallback } from 'react'
 import { OnChangeFunc } from '../../../../dnd-tree/type'
 import { useDispatch } from '../../../../scenes/context'
-import { ITaskSurvey, ITaskSurveyOptions } from '../type'
+import { useActivityTemplaties } from '../hepler'
+import { ITaskSurvey, ITaskSurveyOptions, TaskSurveyOptionsType } from '../type'
 import { SDAOption } from './SDAOption'
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 function View({ task }: { task: ITaskSurvey }) {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const activityTemplates = useActivityTemplaties()
+
   const onNameChange: ChangeEventHandler<
     HTMLTextAreaElement | HTMLInputElement
   > = React.useCallback(
@@ -53,6 +56,30 @@ function View({ task }: { task: ITaskSurvey }) {
     },
     [task, dispatch]
   )
+
+  const onAddOption = useCallback(() => {
+    const newOption = {
+      id: `${new Date().getTime()}`,
+      type: TaskSurveyOptionsType.ActivityTemplate,
+      value: JSON.stringify({
+        name: `Option ${task.properties.options.length}`,
+        template: activityTemplates[0].id,
+      }),
+    }
+    dispatch({
+      type: `update_task`,
+      payload: {
+        data: {
+          ...task,
+          properties: {
+            ...task.properties,
+            options: [...task.properties.options, newOption],
+          },
+        },
+      },
+    })
+  }, [task, dispatch, activityTemplates])
+
   return (
     <>
       <TextField
@@ -67,7 +94,9 @@ function View({ task }: { task: ITaskSurvey }) {
         <Typography variant="h6" className={classes.title}>
           Options
         </Typography>
-        <Button color="inherit">Add</Button>
+        <Button color="inherit" onClick={onAddOption} disabled={activityTemplates.length === 0}>
+          Add
+        </Button>
       </Toolbar>
       {task.properties.options.map((option) => (
         <SDAOption option={option} key={option.id} onChange={onChangeOptions} />

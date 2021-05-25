@@ -7,6 +7,7 @@ export enum SmartDataType {
 export interface ISmartData {
   name: string
   id: string
+  data: string
   type: SmartDataType
   items: ISmartData[]
 }

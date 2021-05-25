@@ -15,8 +15,8 @@ export function isActivity(item: IActivity | ITask): item is IActivity {
   return (item as IActivity).items !== undefined
 }
 
-export function queryChildActivity(store: IStore, node: ISmartData) {
-  const activity = store.activities.find((item) => item.id === node.id)
+export function queryChildActivity(store: IStore, node: ISmartData): ISmartData[] {
+  const activity = store.activities.find((item) => item.id === node.data)
   if (!activity) {
     return []
   }
@@ -24,7 +24,8 @@ export function queryChildActivity(store: IStore, node: ISmartData) {
     .filter((item) => activity.items.includes(item.id))
     .sort((a, b) => activity.items.indexOf(a.id) - activity.items.indexOf(b.id))
   return tasks.map((item) => ({
-    id: item.id,
+    id: `${node.id}.${item.id}`,
+    data: item.id,
     name: item.name,
     type: SmartDataType.TASK,
     items: [],
@@ -32,7 +33,7 @@ export function queryChildActivity(store: IStore, node: ISmartData) {
 }
 
 export function queryChildTask(store: IStore, node: ISmartData) {
-  const nodeData = store.tasks.find((item) => item.id === node.id)
+  const nodeData = store.tasks.find((item) => item.id === node.data)
   if (!nodeData) {
     return []
   }
@@ -43,7 +44,7 @@ export function queryChildTask(store: IStore, node: ISmartData) {
   return []
 }
 
-export function queryChild(store: IStore, node: ISmartData) {
+export function queryChild(store: IStore, node: ISmartData): ISmartData[] {
   switch (node.type) {
     case SmartDataType.ACTIVITY:
       return queryChildActivity(store, node)

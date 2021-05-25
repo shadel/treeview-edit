@@ -42,7 +42,8 @@ function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey): ISmartData[] {
         return undefined
       }
       return {
-        id: item.value.template,
+        id: `${item.id}.option_${item.id}.${item.value.template}`,
+        data: item.value.template,
         name: `${item.value.name} ~ ${template.name}`,
         type: SmartDataType.ACTIVITY,
         items: [],

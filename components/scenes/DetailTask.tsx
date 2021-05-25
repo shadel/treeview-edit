@@ -15,7 +15,7 @@ function TaskView({ task }: { task: ITask }) {
 }
 
 function DetailTask({ data }: { data: ISmartData }) {
-  const task = useSelector((store) => store.tasks.find((task) => task.id === data.id))
+  const task = useSelector((store) => store.tasks.find((task) => task.id === data.data))
   if (!task) {
     return <>Task {data.name} not available</>
   }

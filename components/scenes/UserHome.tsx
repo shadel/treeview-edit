@@ -83,7 +83,13 @@ function UserHome() {
   const classes = useStyles()
   const activityId = 'a1'
   const activity = useActivity(activityId)
-  const rootNode = { id: activity.id, name: activity.name, type: SmartDataType.ACTIVITY, items: [] }
+  const rootNode = {
+    id: activity.id,
+    data: activity.id,
+    name: activity.name,
+    type: SmartDataType.ACTIVITY,
+    items: [],
+  }
   const treeNodeData = useTreeNode(rootNode)
   const smartData = useMemo(() => [treeNodeData], [treeNodeData])
 

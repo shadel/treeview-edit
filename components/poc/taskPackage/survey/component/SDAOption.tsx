@@ -2,26 +2,14 @@ import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mat
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import React, { ChangeEventHandler, useCallback, useMemo } from 'react'
 import { OnChangeFunc } from '../../../../dnd-tree/type'
-import { useActivityId } from '../../../../scenes/ActivityContext'
-import { IStore, useSelector } from '../../../../scenes/context'
 import { valueParse } from '../../../helper'
+import { useActivityTemplaties } from '../hepler'
 import { ITaskSurveyOptions } from '../type'
 const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120,
   },
 }))
-
-function useActivityTemplaties() {
-  const activityId = useActivityId()
-  const actvitiesSelector = useCallback(
-    (store: IStore) => store.activities.filter((item) => item.id !== activityId),
-    [activityId]
-  )
-  const activityTemplaties = useSelector(actvitiesSelector)
-
-  return activityTemplaties
-}
 
 export function SDAOption({
   option,
@@ -55,7 +43,33 @@ export function SDAOption({
         })
       })
     },
-    [onChange, option]
+    [onChange, option.id]
+  )
+
+  const onOptionChange: (
+    event: React.ChangeEvent<{
+      name?: string
+      value: unknown
+    }>
+  ) => void = useCallback(
+    (event) => {
+      onChange((olds) => {
+        return olds.map((old) => {
+          if (option.id !== old.id) {
+            return old
+          }
+          const oldValue = valueParse(old.value)
+          return {
+            ...old,
+            value: JSON.stringify({
+              ...oldValue,
+              template: event.target.value,
+            }),
+          }
+        })
+      })
+    },
+    [onChange, option.id]
   )
 
   return (
@@ -77,7 +91,7 @@ export function SDAOption({
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={template}
-            // onChange={handleChange}
+            onChange={onOptionChange}
             label="Value"
           >
             {activityTemplates.map((item) => (
