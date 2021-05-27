@@ -25,6 +25,7 @@ interface IDnDListProps {
   isDragDisabled?: boolean
   lazyLoad?: React.ComponentType<{ id: string }>
   onSelect?: (event: React.ChangeEvent, nodeIds: string[]) => void
+  isAddToRoot: boolean
 }
 
 const DnDTreeView = ({
@@ -34,6 +35,7 @@ const DnDTreeView = ({
   isDragDisabled: isDragDisabled,
   lazyLoad,
   onSelect,
+  isAddToRoot,
 }: IDnDListProps) => {
   const classes = useStyles()
 
@@ -50,16 +52,33 @@ const DnDTreeView = ({
     )
   }
 
+  const rootId = tasks[0].id
+
+  const [expandedIds, setExpandIds] = React.useState([rootId])
+  const onNodeToggle = React.useCallback(
+    (event: React.ChangeEvent, nodeIds: string[]) => {
+      setExpandIds(nodeIds)
+    },
+    [setExpandIds]
+  )
+
+  // React.useEffect(() => {
+  //   if (!expandedIds.includes(rootId)) {
+  //     setExpandIds((ids) => [...ids, rootId])
+  //   }
+  // }, [expandedIds, rootId])
+
   return (
     <TreeView
       className={classes.root}
-      defaultExpanded={['1']}
       defaultCollapseIcon={<MinusSquare />}
       defaultExpandIcon={<PlusSquare />}
       defaultEndIcon={<CloseSquare />}
       onNodeSelect={onSelect}
+      onNodeToggle={onNodeToggle}
+      expanded={expandedIds}
     >
-      <DroppableArea droppableId="root" type="activty">
+      <DroppableArea droppableId="root" type="activty" isCombineEnabled={true}>
         {tasks.map((task, index) => (
           <DnDTreeItem
             task={task}
@@ -71,6 +90,7 @@ const DnDTreeView = ({
             lazyLoad={lazyLoad}
             onChange={createItemChange(task.id)}
             type="activty"
+            isAddToRoot={isAddToRoot}
           />
         ))}
       </DroppableArea>

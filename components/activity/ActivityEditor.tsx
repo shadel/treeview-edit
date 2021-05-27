@@ -2,11 +2,11 @@ import { Card } from '@material-ui/core'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { ISmartData, SmartDataType } from '../dnd-tree/type'
 import TreeView from '../poc/TreeView'
 import { IActivityRecord, ITask, TaskType } from '../poc/type'
-import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { BeforeCapture, DragDropContext, DropResult } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
 import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
 import { IStore, useDispatch, useSelector } from '../app/context'
@@ -99,6 +99,8 @@ function ActivityEditor({ id: activityId, mode }: { id: string; mode: EditorMode
     },
     [activityId, dispatch]
   )
+  const [isDragNewPackage, setIsDragNewPackage] = useState(false)
+
   const onNew = useCallback(
     (type: string, index: number) => {
       const tPack = taskPackageF.get(type as TaskType)
@@ -116,15 +118,27 @@ function ActivityEditor({ id: activityId, mode }: { id: string; mode: EditorMode
     },
     [activityId, dispatch, mode]
   )
-  const onDragEnd = useCallback((result: DropResult) => makeNewDragEnd({ onMove, onNew })(result), [
-    onMove,
-    onNew,
-  ])
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      setIsDragNewPackage(false)
+      makeNewDragEnd({ onMove, onNew })(result)
+    },
+    [onMove, onNew]
+  )
+
+  const onBeforeCapture = useCallback((initial: BeforeCapture) => {
+    if (taskPackageF.list().findIndex(({ type }) => type === initial.draggableId) >= 0) {
+      setIsDragNewPackage(true)
+    } else {
+      setIsDragNewPackage(false)
+    }
+    console.log(initial)
+  }, [])
   return (
     <ActivityProvider activityId={activityId} mode={mode}>
       <Grid container={true} spacing={8}>
         <Grid item={true} md={4} xs={4}>
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext onDragEnd={onDragEnd} onBeforeCapture={onBeforeCapture}>
             <Card variant="outlined">
               <CardContent>
                 <DroppableArea
@@ -148,7 +162,12 @@ function ActivityEditor({ id: activityId, mode }: { id: string; mode: EditorMode
             </Card>
             <Card variant="outlined">
               <CardContent className={classes.root}>
-                <TreeView datum={smartData} canEdit={true} onSelect={onSelect} />
+                <TreeView
+                  datum={smartData}
+                  canEdit={true}
+                  onSelect={onSelect}
+                  isAddToRoot={isDragNewPackage}
+                />
               </CardContent>
             </Card>
           </DragDropContext>

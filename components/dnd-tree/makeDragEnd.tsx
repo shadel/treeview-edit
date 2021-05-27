@@ -16,6 +16,7 @@ export const makeNewDragEnd = ({
   onMove: (data: string, from: number, to: number) => void
   onNew: (data: string, index: number) => void
 }) => (result: DropResult) => {
+  console.log(result)
   if (!result.destination) {
     return
   }

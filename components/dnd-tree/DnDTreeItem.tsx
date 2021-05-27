@@ -79,6 +79,7 @@ const DnDTreeItem = ({
   lazyLoad: LazyLoadComponent,
   onChange,
   type,
+  isAddToRoot,
 }: {
   task: ISmartData
   index: number
@@ -96,6 +97,7 @@ const DnDTreeItem = ({
   lazyLoad?: React.ComponentType<{ id: string }>
   onChange: OnChangeFunc<ISmartData | undefined>
   type: string
+  isAddToRoot?: boolean
 }) => {
   const localClasses = useStyles({})
   // const newClasses = useTreeItemStyles()
@@ -127,32 +129,43 @@ const DnDTreeItem = ({
       isDragDisabled={isDragDisabled || task.disabled}
     >
       {tasks.length === 0 && (
-        <StyledTreeItem
-          nodeId={task.id}
-          className={classes ? classNames(classes.root, localClasses.root) : localClasses.root}
-          label={item({ task, idx: index, onChange })}
-          // classes={{
-          //   content: newClasses.content,
-          //   expanded: newClasses.expanded,
-          //   selected: newClasses.selected,
-          //   group: newClasses.group,
-          //   label: newClasses.label,
-          // }}
-          onLabelClick={onLabelClick}
-        />
+        <>
+          {!isAddToRoot && (
+            <>
+              <StyledTreeItem
+                nodeId={task.id}
+                className={
+                  classes ? classNames(classes.root, localClasses.root) : localClasses.root
+                }
+                label={item({ task, idx: index, onChange })}
+                onLabelClick={onLabelClick}
+              />
+              <DroppableArea
+                droppableId={`${dropeId}.${task.id}`}
+                type={`${type}.item`}
+              ></DroppableArea>
+            </>
+          )}
+          {isAddToRoot && (
+            <StyledTreeItem
+              nodeId={task.id}
+              className={classes ? classNames(classes.root, localClasses.root) : localClasses.root}
+              label={item({ task, idx: index, onChange })}
+              onLabelClick={onLabelClick}
+            >
+              <DroppableArea
+                droppableId={`${dropeId}.${task.id}`}
+                type={`${type}.item`}
+              ></DroppableArea>
+            </StyledTreeItem>
+          )}
+        </>
       )}
       {tasks.length > 0 && (
         <StyledTreeItem
           nodeId={task.id}
           className={classes ? classNames(classes.root, localClasses.root) : localClasses.root}
           label={item({ task, idx: index, onChange })}
-          // classes={{
-          //   content: newClasses.content,
-          //   expanded: newClasses.expanded,
-          //   selected: newClasses.selected,
-          //   group: newClasses.group,
-          //   label: newClasses.label,
-          // }}
           onLabelClick={onLabelClick}
         >
           {/* {!tasks && LazyLoadComponent && <LazyLoadComponent id={task.id} />} */}
