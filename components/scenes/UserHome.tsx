@@ -10,13 +10,13 @@ import { IActivity, ITask, TaskType } from '../poc/type'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import DroppableArea from '../dnd-tree/DroppableArea'
 import { DropZone, makeNewDragEnd } from '../dnd-tree/makeDragEnd'
-import { IStore, useDispatch, useSelector } from './context'
+import { IStore, useDispatch, useSelector } from '../app/context'
 import { resetServerContext } from 'react-beautiful-dnd'
 import taskPackageF from '../poc/taskPackage'
-import DetailPage from './DetailPage'
-import { ActivityProvider } from './ActivityContext'
+import DetailPage from '../activity/DetailPage'
+import { ActivityProvider } from '../activity/ActivityContext'
 import { useTreeNode } from '../poc/helper'
-import DraggableChip from './DraggableChip'
+import DraggableChip from '../activity/DraggableChip'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()

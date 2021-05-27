@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useActivityId } from '../../../scenes/ActivityContext'
-import { IStore, useSelector } from '../../../scenes/context'
+import { useActivityId } from '../../../activity/ActivityContext'
+import { IStore, useSelector } from '../../../app/context'
 
 export function useActivityTemplaties() {
   const activityId = useActivityId()

@@ -2,7 +2,7 @@ import { TextField } from '@material-ui/core'
 import React, { ChangeEventHandler } from 'react'
 import { ISmartData } from '../dnd-tree/type'
 import { RightPage } from '../layers/RightPage'
-import { useDispatch, useSelector } from './context'
+import { useDispatch, useSelector } from '../app/context'
 
 function DetailActivity({ data }: { data: ISmartData }) {
   const dispatch = useDispatch()

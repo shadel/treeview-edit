@@ -2,7 +2,7 @@ import { ISmartData, SmartDataType } from '../dnd-tree/type'
 import { IActivity, ITask } from './type'
 import taskPackageF from './taskPackage'
 import { useCallback } from 'react'
-import { IStore, useSelector } from '../scenes/context'
+import { IStore, useSelector } from '../app/context'
 
 export function valueParse(value: unknown) {
   try {

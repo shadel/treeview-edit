@@ -1,7 +1,7 @@
 import React from 'react'
 import { ISmartData } from '../dnd-tree/type'
 import { ITask } from '../poc/type'
-import { useSelector } from './context'
+import { useSelector } from '../app/context'
 import taskPackageF from '../poc/taskPackage'
 import { RightPage } from '../layers/RightPage'
 

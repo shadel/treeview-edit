@@ -1,6 +1,6 @@
 import React from 'react'
 import { ISmartData } from '../../dnd-tree/type'
-import { IStore } from '../../scenes/context'
+import { IStore } from '../../app/context'
 import { ITask, TaskType } from '../type'
 
 export interface IPackage {

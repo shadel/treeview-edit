@@ -1,6 +1,6 @@
 import { TextField } from '@material-ui/core'
 import React, { ChangeEventHandler } from 'react'
-import { useDispatch } from '../../../../scenes/context'
+import { useDispatch } from '../../../../app/context'
 import { ITask } from '../../../type'
 
 function View({ task, disabled }: { task: ITask; disabled?: boolean }) {

@@ -1,5 +1,5 @@
 import { ISmartData, SmartDataType } from '../../../dnd-tree/type'
-import { IStore } from '../../../scenes/context'
+import { IStore } from '../../../app/context'
 import { valueParse } from '../../helper'
 import { TaskType } from '../../type'
 import { IPackage } from '../type'
