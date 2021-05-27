@@ -1,11 +1,11 @@
 import React from 'react'
 import { UserApp } from '../components/app/context'
-import UserHome from '../components/scenes/UserHome'
+import Home from '../components/scenes/Home'
 
 const IndexPage = () => {
   return (
     <UserApp>
-      <UserHome />
+      <Home />
     </UserApp>
   )
 }

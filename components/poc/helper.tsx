@@ -81,3 +81,13 @@ export function useTreeNode(node: ISmartData) {
   )
   return useSelector(selector)
 }
+
+export function useTreeNodes(nodes: ISmartData[]) {
+  const selector = useCallback(
+    (store: IStore) => {
+      return nodes.map((node) => queryTree(store, node))
+    },
+    [nodes]
+  )
+  return useSelector(selector)
+}
