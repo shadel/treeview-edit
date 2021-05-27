@@ -49,6 +49,7 @@ export interface ITask {
   id: string
   name: string
   properties: unknown
+  isDraft?: boolean
 }
 export interface IActivity {
   id: string
@@ -60,4 +61,5 @@ export interface IActivityRecord {
   id: string
   name: string
   items: string[]
+  isDraft?: boolean
 }

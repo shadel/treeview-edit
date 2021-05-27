@@ -1,10 +1,18 @@
 import { createContext, PropsWithChildren, useContext } from 'react'
 
+export enum EditorMode {
+  EDIT,
+  CREATE,
+  VIEW,
+}
+
 export interface IActivityContext {
   activityId: string
+  mode: EditorMode
 }
 export const ActivityCContext = createContext<IActivityContext>({
   activityId: '',
+  mode: EditorMode.VIEW,
 })
 
 export function ActivityProvider({ children, ...props }: PropsWithChildren<IActivityContext>) {

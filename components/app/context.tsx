@@ -28,7 +28,10 @@ function composeDispatch<A extends unknown, U extends Dispatch<A>>(dispatchs: U[
 export function UserApp({ children }: PropsWithChildren<Record<string, unknown>>) {
   const [activities, activityDispatch] = useReducer(activityReducer, activityRecords)
   const [tasks, tasksDispatch] = useReducer(taskReducer, taskRecords)
-  const dispatch = composeDispatch([activityDispatch, tasksDispatch])
+  const dispatch = useMemo(() => composeDispatch([activityDispatch, tasksDispatch]), [
+    activityDispatch,
+    tasksDispatch,
+  ])
   const store = useMemo(
     () => ({
       activities,

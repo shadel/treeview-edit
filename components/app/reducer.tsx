@@ -17,9 +17,22 @@ export interface UpdateActivityAction {
   type: `update_activity`
   payload: { data: IActivityRecord }
 }
+export interface CreateActivityAction {
+  type: `create_activity`
+  payload: { data: IActivityRecord }
+}
+export interface DeleteActivityAction {
+  type: `delete_activity`
+  payload: { id: string; isDraft?: boolean }
+}
 export function activityReducer(
   state = activityRecords,
-  action: MoveTaskAction | AddTaskAction | UpdateActivityAction
+  action:
+    | MoveTaskAction
+    | AddTaskAction
+    | UpdateActivityAction
+    | CreateActivityAction
+    | DeleteActivityAction
 ) {
   switch (action.type) {
     case `add_task`: {
@@ -46,6 +59,18 @@ export function activityReducer(
           return { ...item, ...action.payload.data }
         }
         return item
+      })
+    }
+    case `create_activity`: {
+      return [...state, action.payload.data]
+    }
+    case `delete_activity`: {
+      const { id, isDraft } = action.payload
+      return state.filter((item) => {
+        if (!isDraft) {
+          return item.id !== id
+        }
+        return item.id !== id && !item.isDraft
       })
     }
   }

@@ -11,6 +11,7 @@ import { resetServerContext } from 'react-beautiful-dnd'
 import DetailPage from '../activity/DetailPage'
 import { useTreeNodes } from '../poc/helper'
 import { Button } from '../buttons/Button'
+import Link from 'next/link'
 
 // eslint-disable-next-line no-debugger
 resetServerContext()
@@ -44,7 +45,10 @@ function smartSearch(
 }
 
 function useList() {
-  const activitySelector = useCallback((store: IStore) => store.activities, [])
+  const activitySelector = useCallback(
+    (store: IStore) => store.activities.filter(({ isDraft }) => !isDraft),
+    []
+  )
   const list = useSelector(activitySelector)
   return list
 }
@@ -84,7 +88,9 @@ function ActivityList() {
         <DragDropContext onDragEnd={onDragEnd}>
           <Card variant="outlined">
             <CardContent>
-              <Button>Add Activity</Button>
+              <Link href="/add">
+                <Button>Add Activity</Button>
+              </Link>
             </CardContent>
           </Card>
           <Card variant="outlined">
