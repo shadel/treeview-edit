@@ -1,37 +1,66 @@
-import { TextField } from '@material-ui/core'
-import React, { ChangeEventHandler } from 'react'
+import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core'
+import React, { useCallback } from 'react'
 import { useDispatch } from '../../../../app/context'
+import { updateTask } from '../../../../app/reducer'
 import { TaskLayoutWraper } from '../../../layout/TaskLayout'
-import { ITask } from '../../../type'
+import { InstructionTypeList, ITaskInstructionCard } from '../type'
+import { InstructionField } from './InstructionField'
 
-function View({ task, disabled }: { task: ITask; disabled?: boolean }) {
+const useStyles = makeStyles((theme) => ({
+  field: {
+    marginBottom: theme.spacing(2),
+  },
+}))
+
+function View({ task, disabled }: { task: ITaskInstructionCard; disabled?: boolean }) {
+  const classes = useStyles()
   const dispatch = useDispatch()
 
-  const onNameChange: ChangeEventHandler<
-    HTMLTextAreaElement | HTMLInputElement
-  > = React.useCallback(
-    (event) => {
-      dispatch({
-        type: `update_task`,
-        payload: {
-          data: { ...task, name: event.target.value },
-        },
-      })
+  const onChangeInstruction = useCallback(
+    (instructionId: string) => {
+      dispatch(
+        updateTask({
+          ...task,
+          properties: {
+            instruction: InstructionTypeList.find(({ id }) => id === instructionId),
+          },
+        })
+      )
     },
     [task, dispatch]
+  )
+  const onOptionChange: (
+    event: React.ChangeEvent<{
+      name?: string
+      value: string
+    }>
+  ) => void = useCallback(
+    (event) => {
+      onChangeInstruction(event.target.value)
+    },
+    [onChangeInstruction]
   )
 
   return (
     <TaskLayoutWraper task={task} disabled={disabled}>
-      <TextField
-        id="outlined-basic"
-        label="Name"
-        variant="outlined"
-        value={task.name}
-        fullWidth={true}
-        onChange={onNameChange}
-        disabled={disabled}
-      />
+      <FormControl fullWidth={true} variant="outlined" className={classes.field}>
+        <InputLabel id="demo-simple-select-label">Instruction Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={task.properties.instruction.id}
+          onChange={onOptionChange}
+          label="Instruction Type"
+          disabled={disabled}
+        >
+          {InstructionTypeList.map((item) => (
+            <MenuItem value={item.id} key={item.name}>
+              {item.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <InstructionField item={task.properties.instruction} />
     </TaskLayoutWraper>
   )
 }

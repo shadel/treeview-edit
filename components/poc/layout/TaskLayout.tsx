@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback } from 'react'
+import React, { PropsWithChildren, useCallback } from 'react'
 import { RightPage } from '../../layers/RightPage'
 import { ITask } from '../type'
 import taskPackageF from '../taskPackage'
@@ -6,6 +6,7 @@ import { IPackage } from '../taskPackage/type'
 import { Button } from '@material-ui/core'
 import { useDispatch } from '../../app/context'
 import { deleteTask } from '../../app/reducer'
+import { TaskNameField } from './TaskNameField'
 
 export function TaskRemoveButton({ task, disabled }: { task: ITask; disabled?: boolean }) {
   const dispatch = useDispatch()
@@ -33,6 +34,7 @@ function TaskLayout({ task, tPack, children, disabled }: IProps & { tPack: IPack
         </>
       }
     >
+      <TaskNameField task={task} disabled={disabled} />
       {children}
     </RightPage>
   )

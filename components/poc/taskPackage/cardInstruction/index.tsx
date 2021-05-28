@@ -1,18 +1,21 @@
 import { ISmartData } from '../../../dnd-tree/type'
-import { ITask, TaskType } from '../../type'
+import { TaskType } from '../../type'
 import { IPackage } from '../type'
 import View from './component/view'
+import { InstructionTypeList, ITaskInstructionCard } from './type'
 
 const PACKAGE_TYPE = TaskType.InstructionCard
 const PACKAGE_NAME = 'Instruction Card'
 
 function createNew() {
   const id = new Date().getTime()
-  const item: ITask = {
+  const item: ITaskInstructionCard = {
     id: `${id}`,
     name: `${PACKAGE_NAME} ${id}`,
     type: PACKAGE_TYPE,
-    properties: {},
+    properties: {
+      instruction: InstructionTypeList[0],
+    },
   }
   return item
 }

@@ -1,6 +1,6 @@
-import { Button, TextField, Toolbar, Typography } from '@material-ui/core'
+import { Button, Toolbar, Typography } from '@material-ui/core'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import React, { ChangeEventHandler, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { OnChangeFunc } from '../../../../dnd-tree/type'
 import { useDispatch } from '../../../../app/context'
 import { useActivityTemplaties } from '../hepler'
@@ -25,20 +25,6 @@ function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const activityTemplates = useActivityTemplaties()
-
-  const onNameChange: ChangeEventHandler<
-    HTMLTextAreaElement | HTMLInputElement
-  > = React.useCallback(
-    (event) => {
-      dispatch({
-        type: `update_task`,
-        payload: {
-          data: { ...task, name: event.target.value },
-        },
-      })
-    },
-    [task, dispatch]
-  )
 
   const onChangeOptions: OnChangeFunc<ITaskSurveyOptions[]> = useCallback(
     (func) => {
@@ -83,15 +69,6 @@ function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
 
   return (
     <TaskLayoutWraper task={task} disabled={disabled}>
-      <TextField
-        id="outlined-basic"
-        label="Name"
-        variant="outlined"
-        value={task.name}
-        fullWidth={true}
-        onChange={onNameChange}
-        disabled={disabled}
-      />
       <Toolbar disableGutters={true}>
         <Typography variant="h6" className={classes.title}>
           Options

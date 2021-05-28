@@ -13,6 +13,9 @@ export interface UpdateTaskAction {
   type: `update_task`
   payload: { data: ITask }
 }
+export function updateTask(data: ITask) {
+  return { type: `update_task`, payload: { data } }
+}
 export interface DeteleTaskAction {
   type: `delete_task`
   payload: { id: string }
