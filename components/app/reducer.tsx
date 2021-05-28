@@ -13,6 +13,14 @@ export interface UpdateTaskAction {
   type: `update_task`
   payload: { data: ITask }
 }
+export interface DeteleTaskAction {
+  type: `delete_task`
+  payload: { id: string }
+}
+
+export function deleteTask(id: string) {
+  return { type: `delete_task`, payload: { id } }
+}
 export interface UpdateActivityAction {
   type: `update_activity`
   payload: { data: IActivityRecord }
@@ -77,7 +85,10 @@ export function activityReducer(
   return state
 }
 
-export function taskReducer(state = taskRecords, action: AddTaskAction | UpdateTaskAction) {
+export function taskReducer(
+  state = taskRecords,
+  action: AddTaskAction | UpdateTaskAction | DeteleTaskAction
+) {
   switch (action.type) {
     case `add_task`: {
       return [action.payload.data, ...state]
@@ -90,6 +101,9 @@ export function taskReducer(state = taskRecords, action: AddTaskAction | UpdateT
         }
         return { ...item, ...data }
       })
+    }
+    case `delete_task`: {
+      return state.filter(({ id }) => id !== action.payload.id)
     }
   }
   return state

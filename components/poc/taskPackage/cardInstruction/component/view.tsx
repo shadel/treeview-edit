@@ -1,6 +1,7 @@
 import { TextField } from '@material-ui/core'
 import React, { ChangeEventHandler } from 'react'
 import { useDispatch } from '../../../../app/context'
+import { TaskLayoutWraper } from '../../../layout/TaskLayout'
 import { ITask } from '../../../type'
 
 function View({ task, disabled }: { task: ITask; disabled?: boolean }) {
@@ -21,7 +22,7 @@ function View({ task, disabled }: { task: ITask; disabled?: boolean }) {
   )
 
   return (
-    <>
+    <TaskLayoutWraper task={task} disabled={disabled}>
       <TextField
         id="outlined-basic"
         label="Name"
@@ -31,7 +32,7 @@ function View({ task, disabled }: { task: ITask; disabled?: boolean }) {
         onChange={onNameChange}
         disabled={disabled}
       />
-    </>
+    </TaskLayoutWraper>
   )
 }
 

@@ -3,7 +3,6 @@ import { ISmartData } from '../dnd-tree/type'
 import { ITask } from '../poc/type'
 import { useSelector } from '../app/context'
 import taskPackageF from '../poc/taskPackage'
-import { RightPage } from '../layers/RightPage'
 
 function TaskView({ task, disabled }: { task: ITask; disabled?: boolean }) {
   const tPack = taskPackageF.get(task.type)
@@ -12,11 +11,7 @@ function TaskView({ task, disabled }: { task: ITask; disabled?: boolean }) {
   }
   const View = tPack.view
 
-  return (
-    <RightPage title={tPack.name}>
-      <View task={task} disabled={disabled} />
-    </RightPage>
-  )
+  return <View task={task} disabled={disabled} />
 }
 
 function DetailTask({ data }: { data: ISmartData }) {

@@ -6,6 +6,7 @@ import { useDispatch } from '../../../../app/context'
 import { useActivityTemplaties } from '../hepler'
 import { ITaskSurvey, ITaskSurveyOptions, TaskSurveyOptionsType } from '../type'
 import { SDAOption } from './SDAOption'
+import { TaskLayoutWraper } from '../../../layout/TaskLayout'
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -81,7 +82,7 @@ function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
   }, [task, dispatch, activityTemplates])
 
   return (
-    <>
+    <TaskLayoutWraper task={task} disabled={disabled}>
       <TextField
         id="outlined-basic"
         label="Name"
@@ -106,7 +107,7 @@ function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
       {task.properties.options.map((option) => (
         <SDAOption option={option} key={option.id} onChange={onChangeOptions} disabled={disabled} />
       ))}
-    </>
+    </TaskLayoutWraper>
   )
 }
 
