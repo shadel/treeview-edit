@@ -1,10 +1,10 @@
-import { ISmartData, SmartDataType } from '../../../dnd-tree/type'
+import { ISmartData } from '../../../dnd-tree/type'
 import { IStore } from '../../../app/context'
-import { valueParse } from '../../helper'
 import { TaskType } from '../../type'
 import { IPackage } from '../type'
 import View from './component/view'
-import { ITaskSurvey, ITaskSurveyOptions, TaskSurveyOptionsType } from './type'
+import { ITaskSurvey, SQOptionType, TaskSurveyOptionsType } from './type'
+import { extractTree } from './options/extractTree'
 
 const PACKAGE_TYPE = TaskType.Survey
 const PACKAGE_NAME = 'Survey'
@@ -16,41 +16,18 @@ function createNew() {
     name: `${PACKAGE_NAME} ${id}`,
     type: PACKAGE_TYPE,
     properties: {
-      options: [],
+      generateActivity: false,
+      surveyType: TaskSurveyOptionsType.Normal,
+      option: {
+        type: SQOptionType.SHORT_ANSWER,
+      },
     },
   }
   return item
 }
 
 function extractTreeTaskSurvey(store: IStore, item: ITaskSurvey, node: ISmartData): ISmartData[] {
-  function filterOption(options: ITaskSurveyOptions[]) {
-    return options.filter(({ type }) => type === TaskSurveyOptionsType.ActivityTemplate)
-  }
-  const options = filterOption(item.properties.options).map((item) => ({
-    ...item,
-    value: valueParse(item.value),
-  }))
-
-  const templateIds = options.map((item) => item.value.template)
-
-  const templates = store.activities.filter((item) => templateIds.includes(item.id))
-
-  return options
-    .map<ISmartData | undefined>((item) => {
-      const template = templates.find((tItem) => tItem.id === item.value.template)
-      if (!template) {
-        return undefined
-      }
-      return {
-        id: `${node.id}.option_${item.id}.${item.value.template}`,
-        data: item.value.template,
-        name: `${item.value.name} ~ ${template.name}`,
-        type: SmartDataType.ACTIVITY,
-        items: [],
-        disabled: true,
-      }
-    })
-    .filter((item: ISmartData | undefined): item is ISmartData => !!item)
+  return extractTree({ store, item, node })
 }
 
 const tPack: IPackage = {

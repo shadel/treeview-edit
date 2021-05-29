@@ -1,84 +1,72 @@
-import { TaskSurveyOptionsType } from '../poc/taskPackage/survey/type'
-import { IActivity, IActivityRecord, TaskType } from '../poc/type'
+import { InstructionCardType, ITaskInstructionCard } from '../poc/taskPackage/cardInstruction/type'
+import { ITaskSurvey, SQOptionType, TaskSurveyOptionsType } from '../poc/taskPackage/survey/type'
+import { IActivityRecord, ITask, TaskType } from '../poc/type'
 
-export const activity: IActivity = {
-  id: `a1`,
-  name: 'A 1',
-  items: [
-    {
-      id: `t1`,
-      name: `T 1`,
-      type: TaskType.InstructionCard,
-      properties: {},
-    },
-    {
-      id: `t2`,
-      name: `T 2`,
-      type: TaskType.Survey,
-      properties: {
-        options: [
-          {
-            id: `o1`,
-            type: TaskSurveyOptionsType.ActivityTemplate,
-            value: {
-              id: `a2`,
-              name: 'A 2',
-              items: [
-                {
-                  id: `a2t1`,
-                  name: `T 1`,
-                  type: TaskType.InstructionCard,
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
+function createTask(task: ITaskSurvey | ITaskInstructionCard): ITask {
+  return task
 }
 
-export const taskRecords = [
-  {
+export const taskRecords: ITask[] = [
+  createTask({
     id: `t1`,
     name: `T 1`,
     type: TaskType.InstructionCard,
-    properties: {},
-  },
-  {
+    properties: {
+      instruction: {
+        id: '1',
+        name: 'instruction',
+        type: InstructionCardType.TEXT,
+        value: 'Instruction',
+      },
+    },
+  }),
+  createTask({
     id: `t2`,
     name: `T 2`,
     type: TaskType.Survey,
     properties: {
-      options: [
-        {
-          id: `o1`,
-          type: TaskSurveyOptionsType.ActivityTemplate,
-          value: '{"name":"Option 1","template":"a2"}',
-        },
-      ],
+      generateActivity: false,
+      surveyType: TaskSurveyOptionsType.Normal,
+      option: {
+        type: SQOptionType.SHORT_ANSWER,
+      },
     },
-  },
-  {
+  }),
+  createTask({
     id: `t3`,
     name: `T 3`,
     type: TaskType.InstructionCard,
-    properties: {},
-  },
-  {
+    properties: {
+      instruction: {
+        id: '1',
+        name: 'instruction',
+        type: InstructionCardType.TEXT,
+        value: 'Instruction',
+      },
+    },
+  }),
+  createTask({
     id: `t4`,
     name: `T 4`,
     type: TaskType.Survey,
     properties: {
-      options: [
-        {
-          id: `o1`,
-          type: TaskSurveyOptionsType.ActivityTemplate,
-          value: '{"name":"Option 1","template":"a3"}',
-        },
-      ],
+      generateActivity: false,
+      surveyType: TaskSurveyOptionsType.ActivityTemplate,
+      option: {
+        type: SQOptionType.MULTIPLE_CHECKBOX,
+        value: [
+          {
+            id: '1',
+            value: 'a3',
+          },
+          {
+            id: '2',
+            value: 'a4',
+          },
+        ],
+      },
     },
-  },
+  }),
 ]
 
 export const activityRecords: IActivityRecord[] = [

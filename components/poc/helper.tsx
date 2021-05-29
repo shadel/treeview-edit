@@ -46,13 +46,17 @@ export function queryChildTask(store: IStore, node: ISmartData) {
 }
 
 export function queryChild(store: IStore, node: ISmartData): ISmartData[] {
-  switch (node.type) {
-    case SmartDataType.ACTIVITY:
-      return queryChildActivity(store, node)
-    case SmartDataType.TASK:
-      return queryChildTask(store, node)
-    default:
-      return []
+  try {
+    switch (node.type) {
+      case SmartDataType.ACTIVITY:
+        return queryChildActivity(store, node)
+      case SmartDataType.TASK:
+        return queryChildTask(store, node)
+      default:
+        return []
+    }
+  } catch (error) {
+    return []
   }
 }
 
