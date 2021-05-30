@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useDispatch } from '../../../../app/context'
 import {
   ITaskSurvey,
@@ -53,26 +53,6 @@ export function OptionTypeField({
       return SQOptionList
     }
     return SDAOptionList
-  }, [task.properties.surveyType])
-
-  useEffect(() => {
-    const optionList = (() => {
-      if (task.properties.surveyType === TaskSurveyOptionsType.Normal) {
-        return SQOptionList
-      }
-      return SDAOptionList
-    })()
-
-    const newOption = createNew({ task, templates: activityTemplates, type: optionList[0].type })
-    dispatch(
-      updateTask({
-        ...task,
-        properties: {
-          ...task.properties,
-          option: newOption,
-        },
-      })
-    )
   }, [task.properties.surveyType])
 
   return (

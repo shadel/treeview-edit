@@ -1,13 +1,15 @@
 import { SQOptionType } from '../type'
 import { FICreateOptionFunc } from './hepler'
 
+const OPTION_TYPE = SQOptionType.DATE
+
 export const createNew: FICreateOptionFunc = (next) => (props) => {
   const { type } = props
-  if (type !== SQOptionType.DATE) {
+  if (type !== OPTION_TYPE) {
     return next(props)
   }
 
   return {
-    type: SQOptionType.DATE,
+    type: OPTION_TYPE,
   }
 }

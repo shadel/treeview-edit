@@ -16,7 +16,7 @@ export function TaskRemoveButton({ task, disabled }: { task: ITask; disabled?: b
   }, [dispatch, task.id])
 
   return (
-    <Button onClick={onClick} disabled={disabled}>
+    <Button onClick={onClick} disabled={disabled} variant="outlined">
       Remove
     </Button>
   )

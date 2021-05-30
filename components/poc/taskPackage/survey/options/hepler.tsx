@@ -1,3 +1,4 @@
+import React from 'react'
 import { IStore } from '../../../../app/context'
 import { ISmartData, SmartDataType } from '../../../../dnd-tree/type'
 import { IActivityRecord } from '../../../type'
@@ -29,12 +30,15 @@ export function extractTreeFromTemplate(
   item: ITaskSurvey,
   node: ISmartData,
   templateId: string,
-  nameBuilder: (template: IActivityRecord) => string
+  nameBuilder: (template: IActivityRecord) => string,
+  idBuilder?: (node: ISmartData, item: ITaskSurvey, templateId: string) => string
 ) {
   const template = store.activities.find((item) => templateId === item.id)
 
   return {
-    id: `${node.id}.option_${item.id}.${templateId}`,
+    id: idBuilder
+      ? idBuilder(node, item, templateId)
+      : `${node.id}.option_${item.id}.${templateId}`,
     data: templateId,
     name: nameBuilder(template),
     type: SmartDataType.ACTIVITY,
@@ -48,3 +52,11 @@ export type CreateOptionFunc = ItemFunc<
   ITaskSurveyOptions
 >
 export type FICreateOptionFunc = FactoryItemFunc<CreateOptionFunc>
+
+export type OptionProps = {
+  task: ITaskSurvey
+  formControl: string
+  disabled: boolean
+}
+export type OptionComponentFunc = React.ComponentType<OptionProps>
+export type FIOptionComponentFunc = FactoryItemFunc<OptionComponentFunc>

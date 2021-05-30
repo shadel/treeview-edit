@@ -4,6 +4,7 @@ import { ITaskSurvey } from '../type'
 import { TaskLayoutWraper } from '../../../layout/TaskLayout'
 import { SurveyTypeField } from './SurveyTypeField'
 import { OptionTypeField } from './OptionTypeField'
+import { OptionComponent } from '../options/OptionComponent'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,7 @@ function View({ task, disabled }: { task: ITaskSurvey; disabled?: boolean }) {
       ></SurveyTypeField>
       {/* <SDAContent task={task} disabled={disabled} title={classes.title}></SDAContent> */}
       <OptionTypeField task={task} disabled={disabled} formControl={classes.formControl} />
+      <OptionComponent task={task} disabled={disabled} formControl={classes.formControl} />
     </TaskLayoutWraper>
   )
 }
