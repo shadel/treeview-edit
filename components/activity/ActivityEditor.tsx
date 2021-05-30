@@ -180,4 +180,12 @@ function ActivityEditor({ id: activityId, mode }: { id: string; mode: EditorMode
   )
 }
 
-export default ActivityEditor
+function ActivityEditorProtect({ id, mode }: { id: string; mode: EditorMode }) {
+  const activity = useActivity(id)
+  if (!activity) {
+    return <div>Activity Loading</div>
+  }
+
+  return <ActivityEditor id={id} mode={mode} />
+}
+export default ActivityEditorProtect

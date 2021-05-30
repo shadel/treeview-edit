@@ -23,3 +23,8 @@ export function useActivityId() {
   const { activityId } = useContext(ActivityCContext)
   return activityId
 }
+
+export function useEditorMode() {
+  const { mode } = useContext(ActivityCContext)
+  return mode
+}

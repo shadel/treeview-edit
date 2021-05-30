@@ -24,6 +24,18 @@ export interface DeteleTaskAction {
 export function deleteTask(id: string) {
   return { type: `delete_task`, payload: { id } }
 }
+
+export interface SaveTaskAction {
+  type: `save_task`
+  payload: { id: string }
+}
+export function saveTask(id: string) {
+  return {
+    type: `save_task`,
+    payload: { id },
+  }
+}
+
 export interface UpdateActivityAction {
   type: `update_activity`
   payload: { data: IActivityRecord }
@@ -36,6 +48,24 @@ export interface DeleteActivityAction {
   type: `delete_activity`
   payload: { id: string; isDraft?: boolean }
 }
+
+export function deleteActivity(id: string, isDraft?: boolean) {
+  return {
+    type: `delete_activity`,
+    payload: { id, isDraft },
+  }
+}
+export interface SaveActivityAction {
+  type: `save_activity`
+  payload: { id: string }
+}
+export function saveActivity(id: string) {
+  return {
+    type: `save_activity`,
+    payload: { id },
+  }
+}
+
 export function activityReducer(
   state = activityRecords,
   action:
@@ -44,6 +74,7 @@ export function activityReducer(
     | UpdateActivityAction
     | CreateActivityAction
     | DeleteActivityAction
+    | SaveActivityAction
 ) {
   switch (action.type) {
     case `add_task`: {
@@ -81,7 +112,15 @@ export function activityReducer(
         if (!isDraft) {
           return item.id !== id
         }
-        return item.id !== id && !item.isDraft
+        return item.id !== id || !item.isDraft
+      })
+    }
+    case `save_activity`: {
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          return { ...item, isDraft: false }
+        }
+        return item
       })
     }
   }
@@ -90,7 +129,7 @@ export function activityReducer(
 
 export function taskReducer(
   state = taskRecords,
-  action: AddTaskAction | UpdateTaskAction | DeteleTaskAction
+  action: AddTaskAction | UpdateTaskAction | DeteleTaskAction | SaveTaskAction
 ) {
   switch (action.type) {
     case `add_task`: {
@@ -107,6 +146,14 @@ export function taskReducer(
     }
     case `delete_task`: {
       return state.filter(({ id }) => id !== action.payload.id)
+    }
+    case `save_task`: {
+      return state.map((item) => {
+        if (item.id !== action.payload.id) {
+          return item
+        }
+        return { ...item, isDraft: false }
+      })
     }
   }
   return state
